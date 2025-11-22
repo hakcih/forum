@@ -15,6 +15,30 @@
     .card { background:#111; border:1px solid #333; border-radius:6px; padding:20px; text-align:center; }
     .card a { color:#00ff99; text-decoration:none; font-size:1.2rem; }
     .card a:hover { text-decoration:underline; }
+
+    /* Easter Egg styles */
+    #secretZone {
+      position:absolute; top:5px; right:5px;
+      width:25px; height:25px;
+      cursor:pointer;
+    }
+    #easterEgg {
+      display:none; text-align:center; margin-top:50px;
+    }
+    #easterEgg h1 {
+      color:#00ff99; font-size:40px;
+    }
+    .photos {
+      display:flex; justify-content:center; gap:20px; margin-top:30px;
+    }
+    .photos img {
+      width:120px; height:auto;
+      animation: spin 3s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -22,7 +46,6 @@
     <h1>Boutique Call of Duty</h1>
     <p>Choisissez une catégorie</p>
   </header>
-
   <nav>
     <a href="index.html">Accueil</a>
     <a href="boutique.html">Boutique</a>
@@ -30,7 +53,6 @@
     <a href="don.html">Dons</a>
     <a href="dedicace.html">Dédicace</a>
   </nav>
-
   <main>
     <div class="grid">
       <div class="card"><a href="skins.html">Skins</a></div>
@@ -41,12 +63,33 @@
 
   <!-- Bouton retour -->
   <div style="text-align:center; margin-top:30px;">
-    <button onclick="history.back()" 
-            style="background:#00ff99; color:#000; border:none; padding:12px 25px; 
-                   font-size:16px; cursor:pointer; border-radius:5px; font-weight:bold;">
+    <button onclick="history.back()" style="background:#00ff99; color:#242020; border:none; padding:12px 25px; font-size:16px; cursor:pointer; border-radius:5px; font-weight:bold;">
       ⬅ Retour
     </button>
   </div>
 
+  <!-- Zone secrète -->
+  <div id="secretZone"></div>
+
+  <!-- Easter Egg -->
+  <div id="easterEgg">
+    <h1>GG BG t'as trouvé 🎉</h1>
+    <div class="photos">
+      <img src="assets/the-frog.gif" alt="frog">
+      <img src="assets/mario.gif" alt="mario">
+      <img src="assets/aboul.png" alt="abdoul">
+      <img src="assets/nvsko.png" alt="nvsko">
+    </div>
+  </div>
+
+  <script>
+    const secretZone = document.getElementById('secretZone');
+    const easterEgg = document.getElementById('easterEgg');
+
+    secretZone.addEventListener('click', () => {
+      easterEgg.style.display = 'block';
+      window.scrollTo({ top: easterEgg.offsetTop, behavior: 'smooth' });
+    });
+  </script>
 </body>
 </html>
