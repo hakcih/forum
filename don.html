@@ -54,16 +54,16 @@
     <!-- Zone simulation positive -->
     <div id="simulation">
       <p>🎉 Merci pour votre don ! 🎉</p>
-      <img id="pixelDance" src="C:\Users\fatih\Desktop\forum\asset\the-frog.gif" alt="Perso pixel danse">
+      <img id="pixelDance" src="assets/the-frog.gif" alt="Perso pixel danse">
     </div>
 
     <!-- GIF erreur pour don négatif -->
-    <img id="errorGif" src="C:\Users\fatih\Desktop\forum\asset\mario.gif" alt="Mario danse erreur">
+    <img id="errorGif" src="assets/mario.gif" alt="Mario danse erreur">
   </main>
 
   <!-- Sons -->
-  <audio id="confettiSound" src="C:\Users\fatih\Desktop\forum\asset\donsmp3.mp3" preload="auto"></audio>
-  <audio id="errorSound" src="C:\Users\fatih\Desktop\forum\asset\donnegatif.mp3" preload="auto"></audio>
+  <audio id="confettiSound" src="assets/donsmp3.mp3" preload="auto"></audio>
+  <audio id="errorSound" src="assets/donnegatif.mp3" preload="auto"></audio>
 
   <script>
     const form = document.getElementById('donForm');
@@ -73,7 +73,6 @@
     const errorGif = document.getElementById('errorGif');
     const montantInput = document.getElementById('montant');
 
-    // Confettis
     function dropConfetti() {
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
@@ -98,7 +97,6 @@
         return;
       }
 
-      // Cas montant négatif
       if (montant < 0) {
         try {
           errorSound.currentTime = 0;
@@ -108,10 +106,9 @@
         }
         errorGif.style.display = 'block';
         setTimeout(() => errorGif.style.display = 'none', 5000);
-        return; // On ne lance pas les confettis positifs
+        return;
       }
 
-      // Cas montant positif ou zéro
       try {
         sound.currentTime = 0;
         await sound.play();
@@ -124,7 +121,6 @@
       setTimeout(() => simulation.style.display = 'none', 5000);
     });
 
-    // Animation CSS injectée
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes fall {
@@ -135,15 +131,6 @@
       }
     `;
     document.head.appendChild(style);
-
-    // Logs utiles pour débogage
-    window.addEventListener('load', () => {
-      console.log('Chargement sons & gifs:');
-      console.log('donsmp3.mp3:', sound.src);
-      console.log('donnegatif.mp3:', errorSound.src);
-      console.log('the-frog.gif:', document.getElementById('pixelDance').src);
-      console.log('mario.gif:', errorGif.src);
-    });
   </script>
 </body>
 </html>

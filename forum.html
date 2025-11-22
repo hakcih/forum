@@ -95,15 +95,17 @@
     // Afficher les commentaires en temps réel
     const q = query(collection(db, "comments"), orderBy("date"));
     onSnapshot(q, (snapshot) => {
-      commentsDiv.innerHTML = "";
+      commentsDiv.innerHTML = ""; // reconstruit la liste proprement
       snapshot.forEach((doc) => {
         const c = doc.data();
-        commentsDiv.innerHTML += `
-          <div class="comment">
-            <p class="author">${c.author}</p>
-            <p class="theme">Thème : ${c.theme}</p>
-            <p>${c.message}</p>
-          </div>`;
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `
+          <p class="author">${c.author}</p>
+          <p class="theme">Thème : ${c.theme}</p>
+          <p>${c.message}</p>
+        `;
+        commentsDiv.appendChild(div);
       });
     });
   </script>

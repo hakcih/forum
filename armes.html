@@ -16,7 +16,7 @@
 
     /* Style pour l'agrandissement (lightbox) */
     .lightbox {
-      display: none; /* caché par défaut */
+      display: none;
       position: fixed;
       z-index: 9999;
       left: 0; top: 0;
@@ -51,20 +51,20 @@
   <main>
     <div class="grid">
       <div class="card">
-        <img src="C:\Users\fatih\Desktop\forum\asset\doublepompe.png" alt="double pompe">
-        <p>double pompe — 9,99 €</p>
+        <img src="assets/doublepompe.png" alt="double pompe">
+        <p>Double pompe — 9,99 €</p>
       </div>
       <div class="card">
-        <img src="C:\Users\fatih\Desktop\forum\asset\joke.png" alt="joker">
-        <p>joker — 12,99 €</p>
+        <img src="assets/joke.png" alt="joker">
+        <p>Joker — 12,99 €</p>
       </div>
       <div class="card">
-        <img src="C:\Users\fatih\Desktop\forum\asset\ak..png" alt="ak-47">
-        <p>ak-47 — 14,99 €</p>
+        <img src="assets/ak.png" alt="ak-47">
+        <p>AK-47 — 14,99 €</p>
       </div>
       <div class="card">
-        <img src="C:\Users\fatih\Desktop\forum\asset\rpg.png" alt="rpg">
-        <p>rpg — 19,99 €</p>
+        <img src="assets/rpg.png" alt="rpg">
+        <p>RPG — 19,99 €</p>
       </div>
     </div>
   </main>
@@ -76,13 +76,11 @@
   </div>
 
   <script>
-    // Récupère les éléments
     const images = document.querySelectorAll('.card img');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightboxImg');
     const closeBtn = document.getElementById('closeBtn');
 
-    // Quand on clique sur une image
     images.forEach(img => {
       img.addEventListener('click', () => {
         lightbox.style.display = 'flex';
@@ -91,12 +89,10 @@
       });
     });
 
-    // Quand on clique sur la croix
     closeBtn.addEventListener('click', () => {
       lightbox.style.display = 'none';
     });
 
-    // Quand on clique en dehors de l'image
     lightbox.addEventListener('click', (e) => {
       if (e.target !== lightboxImg) {
         lightbox.style.display = 'none';

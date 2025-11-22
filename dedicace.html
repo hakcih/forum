@@ -47,31 +47,29 @@
   <main>
     <h2>✨ Un espace spécial pour nvsko pro gamin ✨</h2>
     <div class="image-container">
-      <img src="C:\Users\fatih\Desktop\forum\asset\nvsko.png" alt="Image de dédicace">
+      <img src="assets/nvsko.png" alt="Image de dédicace">
 
       <!-- Plein de GIF -->
-      <img src="C:\Users\fatih\Desktop\forum\asset\the-frog.gif" class="gif" alt="gif1">
-      <img src="C:\Users\fatih\Desktop\forum\asset\the-frog.gif" class="gif" alt="gif2">
-      <img src="C:\Users\fatih\Desktop\forum\asset\dance.gif" class="gif" alt="gif3">
-      <img src="C:\Users\fatih\Desktop\forum\asset\dance.gif" class="gif" alt="gif4">
+      <img src="assets/the-frog.gif" class="gif" alt="gif1">
+      <img src="assets/the-frog.gif" class="gif" alt="gif2">
+      <img src="assets/dance.gif" class="gif" alt="gif3">
+      <img src="assets/dance.gif" class="gif" alt="gif4">
     </div>
   </main>
 
   <!-- Musique en continu -->
-  <audio id="bgMusic" src="C:\Users\fatih\Desktop\forum\asset\fondmp3.mp3" autoplay loop></audio>
+  <audio id="bgMusic" src="assets/fondmp3.mp3" autoplay loop></audio>
 
   <script>
     const gifs = document.querySelectorAll('.gif');
 
     gifs.forEach(gif => {
-      // Sauvegarde la position initiale
       const initialTop = parseInt(gif.style.top) || 100;
       const initialLeft = parseInt(gif.style.left) || 100;
 
       gif.addEventListener('click', () => {
         gif.style.display = 'none';
         setTimeout(() => {
-          // Nouvelle position limitée à ±300px autour de la position initiale
           const newTop = initialTop + (Math.random() * 600 - 300);
           const newLeft = initialLeft + (Math.random() * 600 - 300);
 
