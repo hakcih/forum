@@ -56,18 +56,20 @@
 
   <!-- Firebase SDK -->
   <script type="module">
+    // Import Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
       from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-    // ⚠️ Mets ici ton propre firebaseConfig
+    // ✅ Configuration Firebase
     const firebaseConfig = {
-      apiKey: "TA_CLE_API",
-      authDomain: "TON_PROJET.firebaseapp.com",
-      projectId: "TON_PROJET",
-      storageBucket: "TON_PROJET.appspot.com",
-      messagingSenderId: "XXXXXXX",
-      appId: "XXXXXXX"
+      apiKey: "AIzaSyB4O4hojEvvTWFoF3ncCyDyg0fv0QpOmn4",
+      authDomain: "callofhub-c588e.firebaseapp.com",
+      projectId: "callofhub-c588e",
+      storageBucket: "callofhub-c588e.firebasestorage.app",
+      messagingSenderId: "634398402018",
+      appId: "1:634398402018:web:69076080346312b0c985bb",
+      measurementId: "G-2LWBCQ2ZHZ"
     };
 
     // Initialiser Firebase
@@ -77,25 +79,32 @@
     const form = document.getElementById('commentForm');
     const commentsDiv = document.getElementById('comments');
 
-    // Ajouter un commentaire dans Firestore
+    // ✅ Ajouter un commentaire dans Firestore
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const theme = document.getElementById('theme').value;
       const author = document.getElementById('author').value;
       const message = document.getElementById('message').value;
 
-      await addDoc(collection(db, "comments"), {
-        theme, author, message,
-        date: new Date()
-      });
-
-      form.reset();
+      try {
+        await addDoc(collection(db, "comments"), {
+          theme,
+          author,
+          message,
+          date: new Date()
+        });
+        alert("✅ Commentaire envoyé !");
+        form.reset();
+      } catch (error) {
+        console.error("Erreur lors de l'ajout :", error);
+        alert("❌ Impossible d'envoyer le commentaire.");
+      }
     });
 
-    // Afficher les commentaires en temps réel
+    // ✅ Afficher les commentaires en temps réel
     const q = query(collection(db, "comments"), orderBy("date"));
     onSnapshot(q, (snapshot) => {
-      commentsDiv.innerHTML = ""; // reconstruit la liste proprement
+      commentsDiv.innerHTML = "";
       snapshot.forEach((doc) => {
         const c = doc.data();
         const div = document.createElement("div");
