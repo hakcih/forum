@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -150,3 +151,157 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dons Call of Duty Hub</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#000; color:#eee; }
+    header { background:#111; padding:20px; text-align:center; color:#00ff99; }
+    nav { background:#222; padding:15px; text-align:center; }
+    nav a { color:#eee; margin:0 20px; text-decoration:none; font-weight:bold; }
+    nav a:hover { color:#00ff99; }
+    main { max-width:600px; margin:30px auto; padding:20px; text-align:center; }
+    form { background:#111; padding:20px; border-radius:6px; border:1px solid #333; }
+    input, select, button { margin:10px 0; padding:10px; width:80%; border-radius:5px; border:none; }
+    button { background:#00ff99; color:#000; font-weight:bold; cursor:pointer; }
+    button:hover { background:#00cc77; }
+    #simulation { margin-top:20px; display:none; }
+    #pixelDance { width:120px; margin-top:15px; }
+    #errorGif { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:200px; z-index:9999; }
+    .confetti { position:fixed; z-index:9998; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Soutenir Call of Duty Hub(entre un chiffre -10 ou 10 essaye les deux)</h1>
+    <p>Merci de votre soutien 💚</p>
+  </header>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="boutique.html">Boutique</a>
+  <a href="forum.html">Forum</a>
+  <a href="don.html">Dons</a>
+  <a href="dedicace.html">Dédicace</a>
+</nav>
+
+
+  <main>
+    <h2>Faire un don (simulation)</h2>
+    <form id="donForm">
+      <label for="montant">Montant du don (€)</label><br>
+      <input type="number" id="montant" name="montant" placeholder="Ex: 10" required><br>
+
+      <label for="methode">Méthode de paiement</label><br>
+      <select id="methode" name="methode">
+        <option>PayPal</option>
+        <option>Carte bancaire</option>
+        <option>Crypto (BTC/ETH)</option>
+      </select><br>
+
+      <button type="submit">Envoyer le don</button>
+    </form>
+
+    <!-- Zone simulation positive -->
+    <div id="simulation">
+      <p>🎉 Merci pour votre don ! 🎉</p>
+      <img id="pixelDance" src="C:\Users\fatih\Desktop\index\asset\the-frog.gif" alt="Perso pixel danse" onerror="this.alt='GIF introuvable: assets/the-frog.gif'">
+    </div>
+
+    <!-- GIF erreur pour don négatif -->
+    <img id="errorGif" src="C:\Users\fatih\Desktop\index\asset\mario.gif" alt="Mario danse erreur" onerror="this.alt='GIF introuvable: assets/mario.gif'">
+  </main>
+
+  <!-- Sons -->
+  <audio id="confettiSound" src="C:\Users\fatih\Desktop\index\asset\donsmp3.mp3" preload="auto"></audio>
+  <audio id="errorSound" src="C:\Users\fatih\Desktop\index\asset\donnegatif.mp3" preload="auto"></audio>
+
+  <script>
+    const form = document.getElementById('donForm');
+    const sound = document.getElementById('confettiSound');
+    const errorSound = document.getElementById('errorSound');
+    const simulation = document.getElementById('simulation');
+    const errorGif = document.getElementById('errorGif');
+    const montantInput = document.getElementById('montant');
+
+    // Petit helper pour confettis
+    function dropConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.textContent = '🎉';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-20px';
+        confetti.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const val = montantInput.value.trim();
+      const montant = parseFloat(val);
+
+      if (isNaN(montant)) {
+        alert('Entre un montant valide (ex: 10).');
+        return;
+      }
+
+      // Cas montant négatif
+      if (montant < 0) {
+        try {
+          errorSound.currentTime = 0;
+          await errorSound.play();
+        } catch (err) {
+          console.log('Lecture son négatif bloquée:', err);
+        }
+        errorGif.style.display = 'block';
+        setTimeout(() => errorGif.style.display = 'none', 5000);
+        return; // On ne lance pas les confettis positifs
+      }
+
+      // Cas montant positif ou zéro
+      try {
+        sound.currentTime = 0;
+        await sound.play();
+      } catch (err) {
+        console.log('Lecture son positif bloquée:', err);
+      }
+
+      simulation.style.display = 'block';
+      dropConfetti();
+
+      setTimeout(() => simulation.style.display = 'none', 5000);
+    });
+
+    // Animation CSS injectée
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fall {
+        to {
+          transform: translateY(${window.innerHeight + 100}px) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Logs utiles pour débogage chemins
+    window.addEventListener('load', () => {
+      console.log('Chargement sons & gifs:');
+      console.log('donsmp3.mp3:', sound.src);
+      console.log('donnegatif.mp3:', errorSound.src);
+      console.log('the-frog.gif:', document.getElementById('pixelDance').src);
+      console.log('mario.gif:', errorGif.src);
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 19aaf6a623e09cfa124e275fd07013a2ceb437ca

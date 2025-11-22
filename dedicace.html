@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -84,3 +85,91 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dédicace a nvsko</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#000; color:#eee; overflow:hidden; }
+    header { background:#111; padding:20px; text-align:center; color:#00ff99; }
+    nav { background:#222; padding:15px; text-align:center; }
+    nav a { color:#eee; margin:0 20px; text-decoration:none; font-weight:bold; }
+    nav a:hover { color:#00ff99; }
+    main { max-width:800px; margin:40px auto; text-align:center; position:relative; }
+    h2 { color:#00ff99; margin-bottom:20px; }
+    .image-container {
+      position: relative;
+      display: inline-block;
+    }
+    .image-container img {
+      max-width:100%;
+      height:auto;
+      border:3px solid #00ff99;
+      border-radius:10px;
+    }
+    .gif {
+      position: absolute;
+      width:80px;
+      height:80px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dédicace a nvsko</h1>
+    <p>Un espace spécial pour nvsko pro gamin </p>
+  </header>
+
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+  </nav>
+
+  <main>
+    <h2>✨ Un espace spécial pour nvsko pro gamin ✨</h2>
+    <div class="image-container">
+      <img src="C:\Users\fatih\Desktop\index\asset\nvsko.png" alt="Image de dédicace">
+
+      <!-- Plein de GIF -->
+      <img src="C:\Users\fatih\Desktop\index\asset\the-frog.gif" class="gif" alt="gif1">
+      <img src="C:\Users\fatih\Desktop\index\asset\the-frog.gif" class="gif" alt="gif2">
+      <img src="C:\Users\fatih\Desktop\index\asset\dance.gif" class="gif" alt="gif3">
+      <img src="C:\Users\fatih\Desktop\index\asset\dance.gif" class="gif" alt="gif4">
+    </div>
+  </main>
+
+  <!-- Musique en continu -->
+  <audio id="bgMusic" src="C:\Users\fatih\Desktop\index\asset\fondmp3.mp3" autoplay loop></audio>
+
+  <script>
+  const gifs = document.querySelectorAll('.gif');
+
+  gifs.forEach(gif => {
+    // Sauvegarde la position initiale
+    const initialTop = parseInt(gif.style.top) || 100;
+    const initialLeft = parseInt(gif.style.left) || 100;
+
+    gif.addEventListener('click', () => {
+      gif.style.display = 'none';
+      setTimeout(() => {
+        // Nouvelle position limitée à ±300px autour de la position initiale
+        const newTop = initialTop + (Math.random() * 600 - 300);
+        const newLeft = initialLeft + (Math.random() * 600 - 300);
+
+        gif.style.top = newTop + "px";
+        gif.style.left = newLeft + "px";
+        gif.style.display = 'block';
+      }, 1000);
+    });
+  });
+  </script>
+</body>
+</html>
+>>>>>>> 19aaf6a623e09cfa124e275fd07013a2ceb437ca

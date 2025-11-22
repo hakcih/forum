@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -109,3 +110,116 @@
   </script>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#000; color:#eee; }
+    header { background:#111; padding:20px; text-align:center; color:#00ff99; }
+    nav { background:#222; padding:15px; text-align:center; }
+    nav a { color:#eee; margin:0 20px; text-decoration:none; font-weight:bold; }
+    nav a:hover { color:#00ff99; }
+    main { max-width:900px; margin:40px auto; padding:20px; background:#111; border-radius:10px; }
+    h2 { color:#00ff99; }
+    form { margin-bottom:20px; }
+    select, input, textarea { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:none; }
+    button { background:#00ff99; color:#000; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; }
+    button:hover { background:#00cc77; }
+    .comment { background:#222; padding:10px; margin:10px 0; border-radius:5px; }
+    .author { font-weight:bold; color:#00ff99; }
+    .theme { font-style:italic; color:#ccc; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Forum</h1>
+    <p>Choisis un thème et partage ton avis</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+  </nav>
+
+  <main>
+    <h2>Laisser un commentaire</h2>
+    <form id="commentForm">
+      <select id="theme" required>
+        <option value="">-- Choisis un thème --</option>
+        <option value="Skin préféré">Skin préféré</option>
+        <option value="Jeu préféré">Jeu préféré</option>
+        <option value="Profil préféré">Profil préféré</option>
+        <option value="Autre">Autre</option>
+      </select>
+      <input type="text" id="author" placeholder="Ton pseudo" required>
+      <textarea id="message" placeholder="Ton commentaire..." required></textarea>
+      <button type="submit">Envoyer</button>
+    </form>
+
+    <h2>Commentaires</h2>
+    <div id="comments"></div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } 
+      from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    // ⚠️ Mets ici ton propre firebaseConfig
+    const firebaseConfig = {
+      apiKey: "TA_CLE_API",
+      authDomain: "TON_PROJET.firebaseapp.com",
+      projectId: "TON_PROJET",
+      storageBucket: "TON_PROJET.appspot.com",
+      messagingSenderId: "XXXXXXX",
+      appId: "XXXXXXX"
+    };
+
+    // Initialiser Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('commentForm');
+    const commentsDiv = document.getElementById('comments');
+
+    // Ajouter un commentaire dans Firestore
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const theme = document.getElementById('theme').value;
+      const author = document.getElementById('author').value;
+      const message = document.getElementById('message').value;
+
+      await addDoc(collection(db, "comments"), {
+        theme, author, message,
+        date: new Date()
+      });
+
+      form.reset();
+    });
+
+    // Afficher les commentaires en temps réel
+    const q = query(collection(db, "comments"), orderBy("date"));
+    onSnapshot(q, (snapshot) => {
+      commentsDiv.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const c = doc.data();
+        commentsDiv.innerHTML += `
+          <div class="comment">
+            <p class="author">${c.author}</p>
+            <p class="theme">Thème : ${c.theme}</p>
+            <p>${c.message}</p>
+          </div>`;
+      });
+    });
+  </script>
+</body>
+</html>
+>>>>>>> 19aaf6a623e09cfa124e275fd07013a2ceb437ca
