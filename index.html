@@ -16,9 +16,11 @@
     footer { background:#111; color:#aaa; text-align:center; padding:15px; margin-top:40px; }
     .banner { text-align:center; margin:20px 0; }
     .banner img { max-width:100%; border:3px solid #00ff99; border-radius:10px; }
-    #gameArea { position:relative; width:100%; height:300px; background:#222; border-radius:10px; overflow:hidden; }
-    #target { position:absolute; width:50px; height:50px; background:#00ff99; border-radius:50%; display:none; cursor:pointer; }
-    #score, #timer { font-weight:bold; color:#ffcc00; }
+    .comments { max-width:800px; margin:30px auto; text-align:left; }
+    .comment { background:#111; border:1px solid #00ff99; padding:10px; margin:10px 0; border-radius:5px; }
+    textarea, input { width:100%; margin-top:10px; border-radius:5px; padding:10px; background:#0b0b0b; color:#eee; border:1px solid #00ff99; }
+    button { margin-top:10px; padding:10px 20px; background:#00ff99; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+    button:hover { background:#00cc77; }
   </style>
 </head>
 <body>
@@ -37,7 +39,6 @@
     <a href="minijeux.html">Mini‑jeux 🎮</a>
     <a href="enigmes.html">Énigmes ❓</a>
     <a href="screamer.html">👀👀</a>
-
   </nav>
 
   <main>
@@ -60,64 +61,84 @@
       <p><a href="boutique.html" style="color:#00ff99;">Cliquez ici pour découvrir nos catégories</a></p>
     </section>
 
+    <!-- ✅ Section avis généraux du forum -->
+    <section class="comments">
+      <h2>💬 Avis généraux du forum</h2>
+      <input id="authorInput" placeholder="Ton pseudo">
+      <textarea id="commentInput" placeholder="Écris ton avis..."></textarea>
+      <button id="sendBtn">Envoyer</button>
+      <div id="commentList"></div>
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Fatih — Call of Duty Hub</p>
   </footer>
 
-  <script>
-    const gameArea = document.getElementById("gameArea");
-    const target = document.getElementById("target");
-    const scoreSpan = document.getElementById("score");
-    const timerSpan = document.getElementById("timer");
-    const result = document.getElementById("result");
+  <!-- ✅ Firebase Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } 
+      from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    let score = 0;
-    let timeLeft = 30;
-    let gameInterval, timerInterval;
+    // ⚠️ Mets ici ta vraie config Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB4O4hojEvvTWFoF3ncCyDyg0fv0QpOmn4",
+      authDomain: "callofhub-c588e.firebaseapp.com",
+      projectId: "callofhub-c588e",
+      storageBucket: "callofhub-c588e.appspot.com",
+      messagingSenderId: "634398402018",
+      appId: "1:634398402018:web:69076080346312b0c985bb",
+      measurementId: "G-2LWBCQ2ZHZ"
+    };
 
-    function showTarget() {
-      const areaWidth = gameArea.clientWidth;
-      const areaHeight = gameArea.clientHeight;
-      const x = Math.random() * (areaWidth - 50);
-      const y = Math.random() * (areaHeight - 50);
-      target.style.left = x + "px";
-      target.style.top = y + "px";
-      target.style.display = "block";
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Identifiant de la section (ici "forum-general")
+    const pageKey = "forum-general";
+
+    const list = document.getElementById("commentList");
+    const authorInput = document.getElementById("authorInput");
+    const messageInput = document.getElementById("commentInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    // Ajouter un avis
+    async function addComment(){
+      const author = authorInput.value.trim() || "Anonyme";
+      const message = messageInput.value.trim();
+      if(!message) return;
+      await addDoc(collection(db, "comments"), {
+        author,
+        message,
+        theme: pageKey,
+        date: serverTimestamp()
+      });
+      messageInput.value = "";
     }
 
-    target.addEventListener("click", () => {
-      if (timeLeft > 0) {
-        score++;
-        scoreSpan.textContent = score;
-        target.style.display = "none";
-        setTimeout(showTarget, 500);
-      }
-    });
-
-    function startGame() {
-      score = 0;
-      timeLeft = 30;
-      scoreSpan.textContent = score;
-      timerSpan.textContent = timeLeft;
-      result.textContent = "";
-      showTarget();
-
-      gameInterval = setInterval(showTarget, 1500);
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerSpan.textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(gameInterval);
-          clearInterval(timerInterval);
-          target.style.display = "none";
-          result.textContent = "⏳ Temps écoulé ! Ton score final est : " + score;
-        }
-      }, 1000);
+    // Charger les avis en temps réel
+    function loadComments(){
+      const q = query(
+        collection(db, "comments"),
+        where("theme", "==", pageKey),
+        orderBy("date", "desc")
+      );
+      onSnapshot(q, snapshot => {
+        list.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "comment";
+          const when = data.date?.toDate ? data.date.toDate().toLocaleString() : "";
+          div.innerHTML = `<strong>${data.author}</strong> (${when})<br>${data.message}`;
+          list.appendChild(div);
+        });
+      });
     }
 
-    // Lancer automatiquement le jeu au chargement
-    window.onload = startGame;
+    sendBtn.addEventListener("click", addComment);
+    loadComments();
   </script>
 </body>
 </html>

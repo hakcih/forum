@@ -43,17 +43,21 @@
 
   <p><a href="enigmes.html">Retour en arrière</a></p>
 
-  <!-- Firebase SDK -->
+  <!-- ✅ Firebase Firestore -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } 
       from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // ⚠️ Mets ici ta vraie config Firebase (celle que tu utilises déjà pour forum.html)
+    // ⚠️ Mets ici ta vraie config Firebase (copie depuis la console Firebase)
     const firebaseConfig = {
-      apiKey: "AIzaSyXXXXXXX",
-      authDomain: "callofhub.firebaseapp.com",
-      projectId: "callofhub",
+      apiKey: "AIzaSyB4O4hojEvvTWFoF3ncCyDyg0fv0QpOmn4",
+      authDomain: "callofhub-c588e.firebaseapp.com",
+      projectId: "callofhub-c588e",
+      storageBucket: "callofhub-c588e.appspot.com",
+      messagingSenderId: "634398402018",
+      appId: "1:634398402018:web:69076080346312b0c985bb",
+      measurementId: "G-2LWBCQ2ZHZ"
     };
 
     // Init Firebase

@@ -13,7 +13,7 @@
     a:hover { color:#fff; }
     .comments { max-width:600px; margin:30px auto; text-align:left; }
     .comment { background:#111; border:1px solid #00ff99; padding:10px; margin:10px 0; border-radius:5px; }
-    textarea { width:100%; height:80px; margin-top:10px; border-radius:5px; padding:10px; }
+    textarea, input { width:100%; margin-top:10px; border-radius:5px; padding:10px; background:#0b0b0b; color:#eee; border:1px solid #00ff99; }
     button { margin-top:10px; padding:10px 20px; background:#00ff99; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
     button:hover { background:#00cc77; }
   </style>
@@ -29,46 +29,78 @@
 
   <!-- ✅ Section commentaires -->
   <div class="comments">
-    <h2>💬 Commentaires</h2>
-    <div id="commentList"></div>
+    <h2>💬 Commentaires publics</h2>
+    <input id="authorInput" placeholder="Ton pseudo">
     <textarea id="commentInput" placeholder="Écris ton commentaire..."></textarea>
-    <button onclick="addComment()">Envoyer</button>
+    <button id="sendBtn">Envoyer</button>
+    <div id="commentList"></div>
   </div>
 
   <p><a href="enigmes.html">Retour en arrière</a></p>
 
-  <script>
-    // Charger les commentaires depuis LocalStorage
-    function loadComments(){
-      const saved = localStorage.getItem("korayComments");
-      const list = document.getElementById("commentList");
-      list.innerHTML = "";
-      if(saved){
-        const comments = JSON.parse(saved);
-        comments.forEach(c => {
-          const div = document.createElement("div");
-          div.className = "comment";
-          div.textContent = c;
-          list.appendChild(div);
-        });
-      }
-    }
+  <!-- ✅ Firebase Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } 
+      from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    // ⚠️ Mets ici ta vraie config Firebase (copie depuis la console Firebase)
+    const firebaseConfig = {
+      apiKey: "AIzaSyB4O4hojEvvTWFoF3ncCyDyg0fv0QpOmn4",
+      authDomain: "callofhub-c588e.firebaseapp.com",
+      projectId: "callofhub-c588e",
+      storageBucket: "callofhub-c588e.appspot.com",
+      messagingSenderId: "634398402018",
+      appId: "1:634398402018:web:69076080346312b0c985bb",
+      measurementId: "G-2LWBCQ2ZHZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Identifiant de la page (ici "koray")
+    const pageKey = "koray";
+
+    const list = document.getElementById("commentList");
+    const authorInput = document.getElementById("authorInput");
+    const messageInput = document.getElementById("commentInput");
+    const sendBtn = document.getElementById("sendBtn");
 
     // Ajouter un commentaire
-    function addComment(){
-      const input = document.getElementById("commentInput");
-      const text = input.value.trim();
-      if(text){
-        let comments = localStorage.getItem("korayComments");
-        comments = comments ? JSON.parse(comments) : [];
-        comments.push(text);
-        localStorage.setItem("korayComments", JSON.stringify(comments));
-        input.value = "";
-        loadComments();
-      }
+    async function addComment(){
+      const author = authorInput.value.trim() || "Anonyme";
+      const message = messageInput.value.trim();
+      if(!message) return;
+      await addDoc(collection(db, "comments"), {
+        author,
+        message,
+        theme: pageKey,
+        date: serverTimestamp()
+      });
+      messageInput.value = "";
     }
 
-    // Charger au démarrage
+    // Charger les commentaires en temps réel
+    function loadComments(){
+      const q = query(
+        collection(db, "comments"),
+        where("theme", "==", pageKey),
+        orderBy("date", "desc")
+      );
+      onSnapshot(q, snapshot => {
+        list.innerHTML = "";
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const div = document.createElement("div");
+          div.className = "comment";
+          const when = data.date?.toDate ? data.date.toDate().toLocaleString() : "";
+          div.innerHTML = `<strong>${data.author}</strong> (${when})<br>${data.message}`;
+          list.appendChild(div);
+        });
+      });
+    }
+
+    sendBtn.addEventListener("click", addComment);
     loadComments();
   </script>
 </body>
