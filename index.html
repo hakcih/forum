@@ -14,15 +14,11 @@
     section { margin-bottom:40px; }
     h2 { color:#00ff99; }
     footer { background:#111; color:#aaa; text-align:center; padding:15px; margin-top:40px; }
-    .banner {
-      text-align:center;
-      margin:20px 0;
-    }
-    .banner img {
-      max-width:100%;
-      border:3px solid #00ff99;
-      border-radius:10px;
-    }
+    .banner { text-align:center; margin:20px 0; }
+    .banner img { max-width:100%; border:3px solid #00ff99; border-radius:10px; }
+    #gameArea { position:relative; width:100%; height:300px; background:#222; border-radius:10px; overflow:hidden; }
+    #target { position:absolute; width:50px; height:50px; background:#00ff99; border-radius:50%; display:none; cursor:pointer; }
+    #score, #timer { font-weight:bold; color:#ffcc00; }
   </style>
 </head>
 <body>
@@ -31,18 +27,20 @@
     <p>Infos, articles et boutique dédiée</p>
   </header>
 
-<nav>
-  <a href="index.html">Accueil</a>
-  <a href="boutique.html">Boutique</a>
-  <a href="forum.html">Forum</a>
-  <a href="don.html">Dons</a>
-  <a href="dedicace.html">Dédicace</a>
-  <a href="blog.html">Actualités / Blog 📰</a>
-</nav>
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+    <a href="blog.html">Actualités / Blog 📰</a>
+    <a href="minijeux.html">Mini‑jeux 🎮</a>
+    <a href="enigmes.html">Énigmes ❓</a>
+    <a href="screamer.html">👀👀</a>
 
+  </nav>
 
- 
-
+  <main>
     <section>
       <h2>Présentation</h2>
       <p>Bienvenue sur Call of Duty Hub, que j’ai créé car je n’avais rien à faire de ma journée.</p>
@@ -61,10 +59,65 @@
       <h2>Accès rapide à la boutique (simulation)</h2>
       <p><a href="boutique.html" style="color:#00ff99;">Cliquez ici pour découvrir nos catégories</a></p>
     </section>
-  </main>
+
 
   <footer>
     <p>&copy; 2025 Fatih — Call of Duty Hub</p>
   </footer>
+
+  <script>
+    const gameArea = document.getElementById("gameArea");
+    const target = document.getElementById("target");
+    const scoreSpan = document.getElementById("score");
+    const timerSpan = document.getElementById("timer");
+    const result = document.getElementById("result");
+
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval, timerInterval;
+
+    function showTarget() {
+      const areaWidth = gameArea.clientWidth;
+      const areaHeight = gameArea.clientHeight;
+      const x = Math.random() * (areaWidth - 50);
+      const y = Math.random() * (areaHeight - 50);
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+      target.style.display = "block";
+    }
+
+    target.addEventListener("click", () => {
+      if (timeLeft > 0) {
+        score++;
+        scoreSpan.textContent = score;
+        target.style.display = "none";
+        setTimeout(showTarget, 500);
+      }
+    });
+
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      scoreSpan.textContent = score;
+      timerSpan.textContent = timeLeft;
+      result.textContent = "";
+      showTarget();
+
+      gameInterval = setInterval(showTarget, 1500);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(gameInterval);
+          clearInterval(timerInterval);
+          target.style.display = "none";
+          result.textContent = "⏳ Temps écoulé ! Ton score final est : " + score;
+        }
+      }, 1000);
+    }
+
+    // Lancer automatiquement le jeu au chargement
+    window.onload = startGame;
+  </script>
 </body>
 </html>

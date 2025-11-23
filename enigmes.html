@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Énigmes ❓</title>
+  <style>
+    body { margin:0; background:#000; color:#eee; font-family:Arial,sans-serif; text-align:center; }
+    header { background:#111; padding:20px; color:#00ff99; }
+    nav { background:#222; padding:15px; }
+    nav a { color:#eee; margin:0 15px; text-decoration:none; font-weight:bold; }
+    nav a:hover { color:#00ff99; }
+    main { margin:30px auto; max-width:600px; }
+    input, button { padding:10px; margin-top:10px; border-radius:5px; border:none; }
+    button { background:#00ff99; color:#000; cursor:pointer; }
+    button:hover { background:#00cc77; }
+    #feedback { margin-top:20px; font-size:18px; }
+    .confetti { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; }
+    .emoji { position:absolute; font-size:24px; animation: fall 3s linear infinite; }
+    @keyframes fall {
+      0% { transform: translateY(-50px); opacity:1; }
+      100% { transform: translateY(100vh); opacity:0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Énigmes ❓</h1>
+    <p>Entre ton prénom pour voir si tu es concerné</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+    <a href="blog.html">Actualités / Blog 📰</a>
+    <a href="minijeux.html">Mini‑jeux 🎮</a>
+    <a href="enigmes.html">Énigmes ❓</a>
+  </nav>
+
+  <main>
+    <h2>Test de prénom</h2>
+    <input type="text" id="answer" placeholder="Ton prénom...">
+    <br>
+    <button onclick="checkAnswer()">Valider</button>
+    <p id="feedback"></p>
+    <div class="confetti" id="confetti"></div>
+    <audio id="sadSound" src="assets/triste.mp3" preload="auto"></audio>
+  </main>
+
+<script>
+  function checkAnswer(){
+    const ans=document.getElementById("answer").value.trim().toLowerCase();
+    const confetti=document.getElementById("confetti");
+    const sadSound=document.getElementById("sadSound");
+
+    if(ans==="murat"){
+      window.location.href="murat.html";
+    } else if(ans==="eymen"){
+      window.location.href="eymen.html";
+    } else if(ans==="yusuf"){
+      window.location.href="yusuf.html";
+    } else if(ans==="abdoul"){
+      window.location.href="abdoul.html";
+    } else if(ans==="cami"){
+      window.location.href="cami.html";
+    } else if(ans==="hoca"){
+      window.location.href="hoca.html";
+    } else if(ans==="koray"){
+      window.location.href="koray.html";
+    } else if(ans==="ensar"){
+      window.location.href="ensar.html";
+    } else if(ans==="eserg" || ans==="egg"){
+      window.location.href="eggs.html";  // ✅ redirection vers la page Eggs
+    } else {
+      document.getElementById("feedback").textContent="❌ Tu n’es pas concerné ou je n’ai pas d’idée sur toi...";
+      sadSound.play();
+
+      confetti.innerHTML="";
+      for(let i=0;i<30;i++){
+        const emoji=document.createElement("div");
+        emoji.className="emoji";
+        emoji.textContent="😢";
+        emoji.style.left=Math.random()*100+"%";
+        emoji.style.animationDuration=(2+Math.random()*3)+"s";
+        confetti.appendChild(emoji);
+      }
+    }
+  }
+</script>
+
+</body>
+</html>

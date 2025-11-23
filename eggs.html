@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Eserg Egg — Galerie</title>
+  <style>
+    body {
+      background:#000;
+      color:#00ff99;
+      font-family:Arial,sans-serif;
+      text-align:center;
+    }
+    header {
+      padding:20px;
+    }
+    nav a {
+      color:#eee;
+      margin:0 15px;
+      text-decoration:none;
+      font-weight:bold;
+    }
+    nav a:hover {
+      color:#00ff99;
+    }
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(2, minmax(200px, 1fr));
+      gap:20px;
+      max-width:700px;
+      margin:30px auto;
+    }
+    .card {
+      background:#111;
+      border:2px solid #00ff99;
+      border-radius:10px;
+      padding:10px;
+      transition: transform 0.3s ease;
+    }
+    .card img {
+      width:100%;
+      height:auto;
+      border-radius:8px;
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+    .card img:hover {
+      transform: scale(1.1) rotate(2deg);
+      filter: brightness(1.2) saturate(1.5);
+    }
+    .caption {
+      color:#ffcc00;
+      margin-top:8px;
+    }
+    a {
+      color:#ffcc00;
+      text-decoration:none;
+    }
+    a:hover {
+      color:#fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Eserg Egg 🥚</h1>
+    <p>Galerie provisoire — deux photos pour commencer</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+    <a href="blog.html">Actualités / Blog 📰</a>
+    <a href="minijeux.html">Mini‑jeux 🎮</a>
+    <a href="enigmes.html">Énigmes ❓</a>
+  </nav>
+
+  <main>
+    <div class="grid">
+      <div class="card">
+        <img src="assets/egg1.png" alt="Eserg Egg photo 1">
+        <div class="caption">Photo 1 — Eserg Egg</div>
+      </div>
+      <div class="card">
+        <img src="assets/egg2.png" alt="Eserg Egg photo 2">
+        <div class="caption">Photo 2 — Eserg Egg</div>
+      </div>
+    </div>
+
+    <p><a href="index.html">Retour à l’accueil</a></p>
+  </main>
+</body>
+</html>

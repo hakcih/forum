@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini‑jeux 🎮</title>
+  <style>
+    body { margin:0; background:#000; color:#eee; font-family:Arial,sans-serif; text-align:center; }
+    header { background:#111; padding:20px; text-align:center; color:#00ff99; }
+    nav { background:#222; padding:15px; text-align:center; }
+    nav a { color:#eee; margin:0 20px; text-decoration:none; font-weight:bold; }
+    nav a:hover { color:#00ff99; }
+    canvas { background:#222; border-radius:10px; display:block; margin:20px auto; }
+    h1 { color:#00ff99; }
+    #score { font-weight:bold; color:#ffcc00; }
+    #gameOver { color:#ff4444; font-size:20px; font-weight:bold; margin-top:10px; }
+    button { background:#00ff99; color:#000; padding:10px 20px; border:none; border-radius:5px; cursor:pointer; margin-top:10px; }
+    button:hover { background:#00cc77; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Mini‑jeux 🎮</h1>
+    <p>Amuse‑toi avec notre jeu Breakout</p>
+  </header>
+
+  <!-- ✅ Navigation intégrée -->
+  <nav>
+    <a href="index.html">Accueil</a>
+    <a href="boutique.html">Boutique</a>
+    <a href="forum.html">Forum</a>
+    <a href="don.html">Dons</a>
+    <a href="dedicace.html">Dédicace</a>
+    <a href="blog.html">Actualités / Blog 📰</a>
+    <a href="minijeux.html">Mini‑jeux 🎮</a>
+    <a href="enigmes.html">Énigmes ❓</a>
+  </nav>
+
+  <main>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <p id="score">Score : 0</p>
+    <p id="gameOver"></p>
+    <button onclick="startGame()">Rejouer</button>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Fatih — Call of Duty Hub</p>
+  </footer>
+
+  <script>
+    function startGame(){
+      const canvas=document.getElementById("gameCanvas");
+      const ctx=canvas.getContext("2d");
+
+      let paddle={x:canvas.width/2-40,y:canvas.height-20,w:80,h:10};
+      let ball={x:canvas.width/2,y:canvas.height-30,vx:3,vy:-3,r:8};
+      let score=0, running=true;
+
+      // Créer les briques
+      const rows=4, cols=8;
+      const brickW=70, brickH=20, padding=10, offsetTop=30, offsetLeft=30;
+      let bricks=[];
+      for(let c=0;c<cols;c++){
+        bricks[c]=[];
+        for(let r=0;r<rows;r++){
+          bricks[c][r]={x:0,y:0,status:1};
+        }
+      }
+
+      document.getElementById("score").textContent="Score : 0";
+      document.getElementById("gameOver").textContent="";
+
+      document.addEventListener("mousemove",e=>{
+        const rect=canvas.getBoundingClientRect();
+        paddle.x=e.clientX-rect.left-paddle.w/2;
+      });
+
+      function drawBricks(){
+        for(let c=0;c<cols;c++){
+          for(let r=0;r<rows;r++){
+            if(bricks[c][r].status==1){
+              let brickX=c*(brickW+padding)+offsetLeft;
+              let brickY=r*(brickH+padding)+offsetTop;
+              bricks[c][r].x=brickX;
+              bricks[c][r].y=brickY;
+              ctx.fillStyle="#00ff99";
+              ctx.fillRect(brickX,brickY,brickW,brickH);
+            }
+          }
+        }
+      }
+
+      function collisionDetection(){
+        for(let c=0;c<cols;c++){
+          for(let r=0;r<rows;r++){
+            let b=bricks[c][r];
+            if(b.status==1){
+              if(ball.x> b.x && ball.x< b.x+brickW && ball.y> b.y && ball.y< b.y+brickH){
+                ball.vy=-ball.vy;
+                b.status=0;
+                score++;
+                document.getElementById("score").textContent="Score : "+score;
+                if(score==rows*cols){
+                  running=false;
+                  document.getElementById("gameOver").textContent="🎉 Bravo ! Tu as cassé toutes les briques !";
+                }
+              }
+            }
+          }
+        }
+      }
+
+      function loop(){
+        if(!running) return;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+        // Dessiner briques
+        drawBricks();
+
+        // Dessiner balle
+        ctx.beginPath();
+        ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);
+        ctx.fillStyle="#fff";
+        ctx.fill();
+        ctx.closePath();
+
+        // Dessiner paddle
+        ctx.fillStyle="#00ff99";
+        ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);
+
+        // Déplacer balle
+        ball.x+=ball.vx;
+        ball.y+=ball.vy;
+
+        // Rebonds murs
+        if(ball.x+ball.r>canvas.width || ball.x-ball.r<0) ball.vx=-ball.vx;
+        if(ball.y-ball.r<0) ball.vy=-ball.vy;
+
+        // Collision paddle
+        if(ball.y+ball.r>paddle.y && ball.x>paddle.x && ball.x<paddle.x+paddle.w){
+          ball.vy=-ball.vy;
+        }
+
+        // Game Over si balle tombe
+        if(ball.y+ball.r>canvas.height){
+          running=false;
+          document.getElementById("gameOver").textContent="💀 Game Over ! Score final : "+score;
+        }
+
+        collisionDetection();
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // Lancer au chargement
+    startGame();
+  </script>
+</body>
+</html>
