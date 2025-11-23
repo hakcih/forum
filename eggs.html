@@ -57,6 +57,11 @@
     a:hover {
       color:#fff;
     }
+    .comments { max-width:600px; margin:30px auto; text-align:left; }
+    .comment { background:#111; border:1px solid #00ff99; padding:10px; margin:10px 0; border-radius:5px; }
+    textarea { width:100%; height:80px; margin-top:10px; border-radius:5px; padding:10px; }
+    button { margin-top:10px; padding:10px 20px; background:#00ff99; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
+    button:hover { background:#00cc77; }
   </style>
 </head>
 <body>
@@ -88,7 +93,50 @@
       </div>
     </div>
 
+    <!-- ✅ Section commentaires -->
+    <div class="comments">
+      <h2>💬 Commentaires</h2>
+      <div id="commentList"></div>
+      <textarea id="commentInput" placeholder="Écris ton commentaire..."></textarea>
+      <button onclick="addComment()">Envoyer</button>
+    </div>
+
     <p><a href="index.html">Retour à l’accueil</a></p>
   </main>
+
+  <script>
+    // Charger les commentaires depuis LocalStorage
+    function loadComments(){
+      const saved = localStorage.getItem("eggComments");
+      const list = document.getElementById("commentList");
+      list.innerHTML = "";
+      if(saved){
+        const comments = JSON.parse(saved);
+        comments.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "comment";
+          div.textContent = c;
+          list.appendChild(div);
+        });
+      }
+    }
+
+    // Ajouter un commentaire
+    function addComment(){
+      const input = document.getElementById("commentInput");
+      const text = input.value.trim();
+      if(text){
+        let comments = localStorage.getItem("eggComments");
+        comments = comments ? JSON.parse(comments) : [];
+        comments.push(text);
+        localStorage.setItem("eggComments", JSON.stringify(comments));
+        input.value = "";
+        loadComments();
+      }
+    }
+
+    // Charger au démarrage
+    loadComments();
+  </script>
 </body>
 </html>
